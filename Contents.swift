@@ -231,7 +231,7 @@ if #available(iOS 12, macOS 10.12, *) { // Si es esta versión o mayor
 }
 
 
-// ------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------
 /* ---------- CURSO DE FUNCIONES CON SWIFT ------------ */
 
 func myFunction1(personName: String) -> String { // [-> String] es el retorno de la función
@@ -283,7 +283,7 @@ func addTwoInts(_ int1: Int, _ int2: Int) -> Int {
 }
 
 // Es de tipo () -> Void
-func sayHello() {
+func sayHello() -> Void {
   print("Hello")
 }
 
@@ -299,7 +299,7 @@ func backward(_ s1: String, _ s2: String) -> Bool {
   return s1 > s2
 }
 
-// Pasandole una función normal
+// Pasandole una función normal (no closure)
 var reversedNames = randomNames.sorted(by: backward)
 
 // Pasandole un closure CON tipos de datos y especificandole el [return] (el cual no es necesario)
@@ -337,6 +337,7 @@ func escapingClousuresStorage(completionHandler: @escaping () -> Void) {
 
 
 /* Enumerations (enumerados) o clase vaga */
+// Dato: Los [enum]s se copian POR VALOR, no por referencia (osea se crea un valor nuevo, no referencian a otra variable ya creada en memoria)
 enum CompassPoint {
   case north
   case south
@@ -393,4 +394,114 @@ if let possiblePlanet3 = Planet(rawValue: 2) {
   print("El planeta \(possiblePlanet3) si existe")
 }
 
+
+
+// -------------------------------------------------------------------------------------------------------------------------
+/* ---------- CURSO DE PROGRAMACION ORIENTADA A OBJETOS CON SWIFT ------------ */
+
+// [struct] y [class] son muy parecidas, [struct] se usa para almacenar y manejar datos mas sencillos, [class] es usado normalmente para datos mas complejos
+
+// [struct] son inmutables al momento de declararlo con [let].
+// - En el [struct] no necesitas crear un constructor, si el [struct] contiene una variable, al momento de instanciar la clase, se le puede asignar un dato ahí mismo (sin haber creado un constructor en el [struct] necesariamente)
+// - En el [struct] los valores se copian POR VALOR y no por referencia (osea que si modifico un valor del [struct] en algun lugar, OJO: NO afectará en todos lados ese valor; eso solo ocurre con copia de valores por referencia)
+
+// [class] SI son mutables aun que se declare con [let]
+// En la [class] los valores son copiados POR REFERENCIA (si modificas un valor, lo modificaras en otros lugares)
+// Comparación: Los objetos se compara con "===" en lugar de con "=="
+
+/* Tipos de propiedades de las [class] y [struct] */
+struct ARandomStruct {
+  var fistValue: Int // 1. Stored Property
+  lazy var secondValue: Int = 0 // 2. Lazy Property (se crea UNICAMENTE cuando se usa por primera vez, no cuando se declara, util para procesos o datos pesados)
+}
+
+// 3. Computed Properties explicación: Son variables calculadas por un algoritmo (nosotros no modificamos directamente lo que contienen), y estas Computed Properties tienen getters y setters para trabajar con ellas
+struct Point {
+  var x = 0.0, y = 0.0
+}
+
+struct Size {
+  var width = 0.0, height = 0.0
+}
+
+struct Rectangle {
+  var origin = Point()
+  var size = Size()
+  var center: Point{ // Esta es la definición de una Computed Property, siendo una variable calculada y creandole su getter para acceder a ella
+    get{
+      let centerX = origin.x + (size.width / 2)
+      let centerY = origin.y + (size.height / 2)
+      return Point(x: centerX, y: centerY)
+    }
+    
+    set(newCenter) {
+      origin.x = newCenter.x - (size.width / 2) // en lugar de [newCenter] que llega como parametro, podrías utilizar por defecto el [newValue] que toma el valor actual del getter de la variable [center] en este caso
+      origin.y = newCenter.y - (size.height / 2)
+    }
+  }
+}
+
+let square = Rectangle(origin: Point(x: 0.0, y: 0.0), size: Size(width: 10, height: 10))
+print("El punto central del cuadrado es: \(square.center)") // con [square.center] se está consultando el getter
+
+// 4. Property Observers: Se crea de una manera parecida a los Computed Properties en cuanto a abrir las { }
+// willset: (futuro) se llamara justo ANTES de cambiar el valor de una property
+// didset: (pasado) se llamará justo DESPUES de cambiar el valor de una property
+class PJHealth {
+  var totalHealth: Int = 100 {
+    willSet(damage) {
+      if totalHealth > 0 && totalHealth < 100 {
+        print("Daño que recibirás: \(damage)")
+      } else {
+        print("No puedes recibir daño si no tienes vida")
+      }
+    }
+    didSet {
+      print("Llamado despues del seteo del dato")
+    }
+  }
+}
+
+let PJ = PJHealth()
+PJ.totalHealth = 150
+
+// 5. Type o Static Properties
+struct RandomStruct {
+  static var storedTypeProperty = "Some value"
+}
+let myVariable = RandomStruct.storedTypeProperty // Se accede directamente sin crear la instancia de la [struct] o [class]
+
+class SomeClass {
+  static var storedTypeProperty = "Another some value"
+  class var overrideableComputedTypeProperty: Int { // La diferencia entre [static] y este uso del [class] (que es solo para Computed Properties) es que con [class] un hijo de esta clase puede "overridear"/sobreescribir esta propiedad, mientras que con [static] no podría
+    return 10
+  }
+}
+
+/* Metodos/Methods */
+class Counter {
+  var count = 0
+  
+  func increment() -> Void {
+    self.count += 1 // el [self] es exactamente lo mismo que el [this] en JS o en Dart, hace referencia a la clase
+    // count += 1 // Podría hacerse así también, es mejor por claridad usar el [self] (lo mismo que el [this]
+  }
+  
+  static func randomStaticMethod() { // Podriamos usar tambien la palabra reservada [class] si queremos que el metodo pueda ser sobreescribido
+    print("RandomStaticMethod called")
+  }
+}
+
+Counter.randomStaticMethod()
+
+struct SecondCounter {
+  var counter = 0
+  
+  mutating func incrementIn(number: Int) -> Void { // [mutating] para las [struct] y [enum] son necesarios si queremos que una función modifique un valor de nuestra [struct]/[enum]
+    self.counter += number
+  }
+}
+
+var secondCounter = SecondCounter()
+secondCounter.incrementIn(number: 10)
 
