@@ -505,3 +505,204 @@ struct SecondCounter {
 var secondCounter = SecondCounter()
 secondCounter.incrementIn(number: 10)
 
+/* Subindices/subscripts para metodos */
+// No existe en ningun otro lenguaje, sirve para crear estructuras que funcionen con indices como en el siguiente ejemplo
+
+struct TimesTable {
+  let multiplier: Int
+  
+  subscript(index: Int) -> Int {
+    return multiplier * index
+  }
+}
+
+let threeTimesTables = TimesTable(multiplier: 3)
+print("6 x 3 = \(threeTimesTables[6])") // Es una sintaxis especial para usar el subscript y le paso 6 como [index]
+
+/* Matrices con subindices/subscripts */
+
+struct Matrix {
+  let rows: Int, columns: Int
+  var grid: [Double]
+  
+  init(rows: Int, columns: Int) { // [init] es el CONSTRUCTOR en cualquier otro lenguaje, sirve para [struct] o [class]
+    self.rows = rows
+    self.columns = columns
+    grid = Array(repeating: 0.0, count: rows * columns)
+  }
+  
+  func indexIsValid(row: Int, column: Int) -> Bool {
+    return row > 0 && column > 0 && row < rows && column < columns
+  }
+  
+  subscript(row: Int, column: Int) -> Double {
+    get{
+      assert(indexIsValid(row: row, column: column), "Index out of range")
+      return grid[(row * columns + column)]
+    }
+    
+    set{
+      assert(indexIsValid(row: row, column: column), "Index out of range")
+      grid[(row * columns + column)] = newValue
+    }
+  }
+}
+
+var matrix = Matrix(rows: 2, columns: 2)
+
+/* Herencia/Inheritance */
+class Vehicule {
+  var currentSpeed = 0.0
+  
+  var description: String {
+    return "Vamos a \(self.currentSpeed) km/h"
+  }
+}
+
+/* Sobreescritura/Overriding */
+class Car: Vehicule { // Se usa el [:] para decir "extends" o "hereda" de una clase padre
+  final var gear = 1 // [final] se usa para evitar que una variable o función/metodo sea sobreescibible/overrideable
+  
+  override var description: String {
+    return super.description + ", en la marcha \(self.gear)" // [super] para invocar el metodo de la clase padre
+  }
+}
+
+/* Constructor y constructores "nombrados"/overloading */
+
+struct Celsius {
+  var temperature: Double
+  
+  init(fromFahrenheit fahrenheit: Double) { // Funciona como overloading, ya que tenemos dos constructores pero con contextos diferentes
+    self.temperature = (fahrenheit - 32) / 1.8
+  }
+  
+  init(fromKelvin kelvin: Double) {
+    self.temperature = kelvin - 273.15
+  }
+  
+  init(_ celsius: Double) {
+    self.temperature = celsius
+  }
+}
+
+let boilingPointOfWater = Celsius(fromFahrenheit: 212)
+let freezingPointOfWater = Celsius(fromKelvin: 273.15)
+let bodyTemperature = Celsius(37)
+
+/* Constructores/inicializadores en subclases */
+
+class VehicleAgain {
+  var numberOfWheels = 0
+  var description: String {
+    return "Tiene \(self.numberOfWheels) ruedas"
+  }
+}
+
+class Bicycle: VehicleAgain {
+  override init() { // Siempre que se use [override] con el [init] debe llamarse primero el constructor del padre [super.init()], si no, sale un error
+    super.init()
+    numberOfWheels = 2
+  }
+}
+
+class Hoverboard: VehicleAgain {
+  var color: String
+  
+  init(color: String) {
+    self.color = color
+    // Aquí se llama implicitamente a [super.init()] para inicializar la clase padre
+  }
+}
+
+enum TemperatureUnit {
+  case kelvin, celsius, fahrenheit
+  
+  init?(symbol: Character) { // Quiere decir que a la hora de inicializar esta clase (construirla) puede retornar un valor o no [nil]
+    switch symbol {
+      case "K":
+        self = .kelvin
+      case "C":
+        self = .celsius
+      case "F":
+        self = .fahrenheit
+      default:
+        return nil
+    }
+  }
+}
+
+let someUnit: TemperatureUnit? = TemperatureUnit(symbol: "X") // Esto da un [nil]
+
+/* Deinit / Desinicializador */
+// Es lo opuesto a un constructor, cuando se va a destruir la clase, se llama este metodo [deinit]
+
+class Bank {
+  static var coinsInBank = 2_000
+  
+  static func withdrawal(coins numberOfCoinsRequested: Int) -> Int {
+    let numberOfCoinsToVend = min(numberOfCoinsRequested, coinsInBank)
+    coinsInBank -= numberOfCoinsRequested
+    return numberOfCoinsToVend
+  }
+
+  static func receive(coins: Int) {
+    coinsInBank += coins
+  }
+}
+
+class Player {
+  var coinsInPurse: Int
+  
+  init(coins: Int) {
+    self.coinsInPurse = Bank.withdrawal(coins: coins)
+  }
+  
+  func win(coins: Int) {
+    coinsInPurse += Bank.withdrawal(coins: coins)
+  }
+  
+  deinit { // Cuando se destruya el [Player] ocurriá lo siguiente
+    Bank.receive(coins: self.coinsInPurse)
+  }
+}
+
+var playerOne: Player? = Player(coins: 1200)
+Bank.coinsInBank
+playerOne = nil // Aquí destruimos la instancia y eso llama el [desinit]
+Bank.coinsInBank // Las monedas vuelven al banco debido al código del [desinit] de [Player]
+
+/* Optional Chaining / Encadenamiento de Optionals */
+// el [?] funciona igual que en Flutter
+
+class Person {
+  var residence: Residence? // Una persona puede o no tener una residencia
+}
+
+class Residence {
+  var numberOfRooms = 1
+}
+
+let edgar = Person()
+
+print(edgar.residence?.numberOfRooms ?? "No tiene casa") // Esto es lo mismo que el [if] de abajo
+if let roomsCount = edgar.residence?.numberOfRooms {
+  // En caso de que [roomsCount] exista, entrará aca
+  print(roomsCount)
+} else {
+  print("No tiene casa")
+}
+
+if let _ = edgar.residence?.numberOfRooms {
+  // En caso de que [_] exista, entrará aca. El [_] se usa cuando no necesitamos la variable/constante adentro del [if]
+} else {
+  print("No tiene casa")
+}
+
+/* Normalmente esto es lo que se haría en cualquier otro lenguaje, pero en Swift es comun crear un [let] y no una comparación directa con [nil] (como se hace en el condicional de [roomsCount]
+ if edgar.residence?.numberOfRooms != nil {
+   print("EXISTEE")
+ } else {
+   print("NO EXISTEE")
+ }
+ */
