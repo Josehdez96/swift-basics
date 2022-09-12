@@ -706,3 +706,10 @@ if let _ = edgar.residence?.numberOfRooms {
    print("NO EXISTEE")
  }
  */
+
+/* Protocolos para [struct] */
+// struct ContentView: View { // Estos [:] en un [struct] es un protocolo: Es una forma de hacer las cosas que tienes que cumplir a fuerzas (como un protocolo de seguridad). En este caso la [struct] [ContentView] debe cumplir el protocolo que le requiere [View] que sería que si o si debe devolver una vista/pantalla
+//  var body: some View { // este [some] quiere decir que debe devolver "algún" tipo de vista
+//    Text("Hola mundo").padding()
+//  }
+// }
