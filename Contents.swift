@@ -713,3 +713,7 @@ if let _ = edgar.residence?.numberOfRooms {
 //    Text("Hola mundo").padding()
 //  }
 // }
+
+/* Vistas y controles */
+// Vista: Pantallas y composición de la mismas (componentes por ejemplo como Texto)
+// Controles: Cualquier elemento con el que el usuario puede interactuar en la app
