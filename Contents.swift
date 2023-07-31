@@ -10,11 +10,14 @@ print("Menciona a myRandomNumber: \(myRandomNumber)", terminator: " ") // string
 let nameChars: [Character] = ["J","o","s","e"]
 let nameString = String(nameChars) // Con este metodo creamos un String y junta los caracteres
 
-var myRandomNumber: Int = 0 // Permite numeros positivos y negativos (Ojo, tanto Int como UInt (sin especificarle cuantos bits) es lo mismo que Int64, ver si realmente se necesitan 64 bits para el dato que queremos usar ya que un numero de 64 bits es demasiado grande y probablemente desperdicio de memoria)
-let cannotBeNegative: UInt = 10 // UInt no permite numeros negativos (-)
-let other2Num: Int8 = Int8.min // Va de -128 a 128 (porque es la mitad de 256), ver si se necesita tanto este rango o puede usarse el UInt que no permite numeros negativos (osea que va de 0 a 255)
-let minValue: UInt8 = UInt8.min // 2^0-1
-let maxValue: UInt8 = UInt8.max // 2^8-1 (8 bits)
+
+// Difference between [Int] and [UInt]. [Int] accepts both positive and negative numbers, while [UInt] only allows non-negative (positive) numbers.
+// Speaking of Integers, we can set how many bits the number will have, for example Int8, Int16, Int64 and so on. This is for code optimization.
+var myRandomNumber: Int = 0 // Permite numeros positivos y negativos (Ojo, tanto [Int] como [UInt] (sin especificarle cuantos bits) es lo mismo que [Int64], ver si realmente se necesitan 64 bits para el dato que queremos usar ya que un numero de 64 bits es demasiado grande y probablemente desperdicio de memoria)
+let cannotBeNegative: UInt = 10 // [UInt] no permite numeros negativos (-)
+let other2Num: Int8 = Int8.min // Va de -128 a 128 (porque es la mitad de 256), ver si se necesita tanto este rango o puede usarse el [UInt] que no permite numeros negativos (osea que va de 0 a 255)
+let minValue: UInt8 = UInt8.min // 0 (8 bits)
+let maxValue: UInt8 = UInt8.max // 255 (8 bits)
 
 let myFloatNum: Float = 10.1 // Numeros decimales de 32 bits, menos precisión, numero de hasta 6 decimales (el resto de decimales si existen, los redondea)
 let myDoubleNum: Double = 5.50 // Numeros decimales de 64 bits, mas precisión, numero de hasta 16 decimales
@@ -22,9 +25,10 @@ let myDoubleNum: Double = 5.50 // Numeros decimales de 64 bits, mas precisión, 
 let oneMillion =  1_000_000 // Swift ignora el "_" al momento de ejecutarse asi que no ocupa memoria pero es mas facil leer un millon asi que sin tener ningun tipo de separador como 1000000
 
 /* Casting */
+// Casting: transformación de un tipo de dato a otro
 let twoThousand: UInt16 = 2_000
 let one: UInt8 = 1
-let twoThousandOne = twoThousand + UInt16(one) // casting: transformación a otro tipo de dato
+let twoThousandOne = twoThousand + UInt16(one)
 let pi: Float = 3.1416
 let integerPi = Int(pi) // Te transforma el dato a un integer, osea, le borra los decimales. Hace lo mismo que el metodo [round()]
 
