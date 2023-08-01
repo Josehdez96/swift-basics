@@ -41,12 +41,12 @@ let audioDataReceived: AudioSample = 10_000
 let http404Error: (Int16, String) = (404, "Pagina no encontrada") // 1ra forma de tipar la tupla (se crea con indices numericos)
 let http500Error: (statusCode: Int16, statusMessage: String, extra: String) = (500, "Server Error", "AnotherThing") // 2da forma de tipar la tupla (se crea con los indices nombrados que elijamos)
 let http200Status = (statusCode: 200, statusMessage: "OK", extra: "Nothing") // 3ra forma de usar PERO NO DE TIPAR la tupla creandolo con indices nombrados
-print("Error number: \(http404Error.0)")
-print("Status message: \(http500Error.statusMessage)")
-print("Another status message: \(http200Status.statusMessage)")
-let (statusCode, statusMessage)  = http404Error // Creo una definición para cada elemento interno de la tupla
-print(statusCode)
-print(statusMessage)
+print("Error number: \(http404Error.0)") // "Error number: 404"
+print("Status message: \(http500Error.statusMessage)") // "Status message: Server Error"
+print("Another status message: \(http200Status.statusMessage)") // "Another status message: OK"
+let (statusCode, statusMessage) = http404Error // Creo una definición para cada elemento interno de la tupla
+print(statusCode) // 404
+print(statusMessage) // "Pagina no encontrada"
 let (justStatusCode, _) = http404Error // Omitir uno de los elementos usando "_"
 print(justStatusCode)
 (1, "Juan") < (2, "Ricardo") // true porque compara indices de uno en uno (1 es mayor que 2)
