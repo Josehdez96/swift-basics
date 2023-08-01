@@ -62,22 +62,22 @@ let exponentDouble = 1.22e1
 
 /* Optionals: */
 // En Swift no existe [null], solo existe la ausencia de valor y esta se llama [nil]. Es muy parecido al null safety de Flutter, usa ? y ??.
-// El principal problema con los datos nil es que cuando se retornan son tratados como [Optional(datoCualquiera)] en lugar de [datoCualquiera], osea, son dos tipos de datos distintos
+// El principal problema con los datos [nil] es que cuando se retornan son tratados como [Optional(datoCualquiera)] en lugar de [datoCualquiera], osea, son dos tipos de datos distintos
 /* Unwrap: */
 // Existen 2 unwraps; los optionals con "?" y el forzado con "!". Tambien existe el unwrapping implicito "!" al momento de tipar datos
 var possibleAge: String = "26"
 possibleAge = "paco"
-let convertedAge: Int8? = Int8(possibleAge) // Si no es un Int8, será nill ya que es un tipo de dato opcional
+let convertedAge: Int8? = Int8(possibleAge) // Si no es un Int8, será [nil] ya que es un tipo de dato opcional
 if convertedAge != nil {
     print(convertedAge!) // Simbolo [!] se usa para dos cosas 1. Le dices al código que estas seguro que ya hay un valor allí y que confie en ti (El otro uso está explicado mas abajo)
 }
 if let convertedAgeWithoutNil = convertedAge { // Sirve para convertir un valor optional a un NO optional
-    // Si [convertedAgeWithoutNil] se setea, al NO ser optional, quiere decir que en [convertedAge] si había un valor (osea que no era [nil])
+    // Si [convertedAgeWithoutNil] se setea, al ya NO ser optional, quiere decir que en [convertedAge] si había un valor (osea que no era [nil])
     // convertedAge != nil --> El if de arriba funciona para lo mismo que esto
     print(convertedAgeWithoutNil)
 }
 let possibleString: String? = "holis" // Simbolo [!] 2. Cuando se usa para tipar un dato; Le dices que seguro esa variable nunca va a ser nula
-// let surelyAString: String = possibleString! // Esto no debe hacerse ya que fuerza el código sin verificación que NO sea nulo
+// let surelyAString: String = possibleString! // Esto NO debe hacerse ya que fuerza el código sin verificación que NO sea nulo
 let assumedString: String! = "Otro string"
 let implicitString: String = assumedString // Esto si puede hacerse ya que [assumedString] es implicito que NO será nulo
 
@@ -88,7 +88,7 @@ func canThrowError() throws { // Si una función por lo que sea puede fallar, ha
 
 /* Try-catch */
 do {
-    try canThrowError()
+    try canThrowError() // Se usa [try] para especificar que es lo que hay que evaluar que podría o no fallar
     // Si llega aquí, no ha habido error
 } catch {
     // Ha habido un error
@@ -109,7 +109,7 @@ for index in 1..<5 { // Rango semi-abierto osea no incluyente que va del 1 al 4 
   print(index)
 }
 let names = ["Jose", "Daniel", "Juan"]
-for name in names[1...] { // Rango abierto; que empiece en 1 y siga adelante hasta que acabe
+for name in names[1...] { // Rango abierto; que empiece en 1 y siga adelante hasta que acabe, en este caso empezaría en "Daniel"
   print(name)
 }
 for name in names[...2] { // Rango abierto; que empiece desde el principio y llegue hasta 2
@@ -119,7 +119,7 @@ for (index, item) in names.enumerated() { // [.enumerated] para tener el valor y
   print("Index: \(index), Item: \(item)")
 }
 
-/* Colecciones (arrays, conjuntos, diccionarios) */
+/* Colecciones de datos (arrays, conjuntos, diccionarios) */
 /* Arrays */
 var someInts: [Int8] = [] // Tambien podría inicializarse vacío usando - var someInts = [Int8]()
 someInts = [] // Resetear el array
@@ -129,7 +129,8 @@ print("Array: \(someInts)")
 print("Array count: \(someInts.count)")
 print("Partial array: \(someInts[0...2])")
 
-/* Conjuntos */ // en un conjunto no hay orden en los elementos que lo componen y (en esto es parecido a un Set) no puede tener elementos duplicados. Funcionan con teoria de conjuntos (union, interseccion, - y +)
+/* Conjuntos */ 
+// En un conjunto no hay orden en los elementos que lo componen y (en lo siguiente es parecido a un Set) no puede tener elementos duplicados. Funcionan con teoria de conjuntos (union, interseccion, - y +)
 var letters: Set<Character> = []
 letters.count
 letters.insert("a")
@@ -137,7 +138,8 @@ letters.insert("b")
 letters
 letters.remove("b")
 
-/* Diccionarios */ // Estructura de mapa - key: value
+/* Diccionarios */ 
+// Estructura de mapa - key: value
 var airports = [String: String]()
 airports = [:] // Vaciar el diccionario/mapa
 airports["SKBO"] = "El Dorado"
@@ -157,7 +159,7 @@ if airports.count < 1 {
 else if airports.count < 2 {
   //
 } else {
-    
+ //
 }
 
 
@@ -194,11 +196,11 @@ let somePoint = (1,1)
 switch somePoint {
   case (0,0):
     print("El punto \(somePoint) es el origen")
-  case (_,0): // Me da igual cual sea el primer valor
+  case (_,0): // Me da igual cual sea el primer valor, solo evalua el segundo
     print("La coordenada X es 0")
   case (-2...2, -2...2): // Revisar que esté en este rango
     print("El punto \(somePoint) se halla en el rango -2 a 2")
-  case (let x, 0):
+  case (let x, 0): // Guarda el eje x y solo evalua que se cumpla el eje y
     print("Sobre el eje X está el valor: \(x)")
   case (let x, let y): // Tambien puede hacerse así let (x, y)
     print("Sobre el eje X está el valor: \(x)")
