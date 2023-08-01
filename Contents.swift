@@ -216,8 +216,8 @@ switch somePoint {
 // return
 // throw(errores)
 
-/* Palabras clave */
-// guard-else (reemplaza literalmente el if, si es un valor nil, SI ingresará)
+/* guard-else */
+// Reemplaza literalmente el if conditional, si es un valor nil, SI ingresará
 var people: [String: Any] = ["name": "Juan Gabriel", "age": 31]
 func testUserValidation() {
   guard let lastname = people["lastname"] else {
