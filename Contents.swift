@@ -276,7 +276,7 @@ mean(1.5, 2.7)
 /* Parametro de entrada y salida */
 // Sirve para modificar variables externas de las llaves que compete la función, se usa [inout] y [&] al momento de pasar el valor a la función
 var x = 5
-func addOne(_ number: inout Int) {
+func addOne(_ number: inout Int) { // Si no se hace el [inout] y [&], toma el parametro [number] como un let (una constante en Swift) y no permite mutar el valor, sale un error mencionado esto.
   return number += 1
 }
 addOne(&x)
@@ -288,7 +288,7 @@ func addTwoInts(_ int1: Int, _ int2: Int) -> Int {
   return int1 + int2
 }
 
-// Es de tipo () -> Void
+// El retorno de la función es tipo [Void]
 func sayHello() -> Void {
   print("Hello")
 }
@@ -296,7 +296,7 @@ func sayHello() -> Void {
 /* Clousures */
 // Tipo especial de función mas sencilla, podría considerarse como una función anonima. Son algo parecido a los callbacks en JS
 /*
- { (params) -> return type in
+ { (params) -> [return type] in
     // Código del clousure
  }
  */
@@ -314,7 +314,7 @@ reversedNames = randomNames.sorted(by: { (s1: String, s2: String) -> Bool in ret
 // Pasandole un closure SIN tipos de datos
 reversedNames = randomNames.sorted(by: { s1, s2 in s1 > s2 })
 
-// Pasandole un closure sin nombrar los parametros, solo usandolos según su posición, se usa [$]. [$0] es el primero parametro que me llega y [$1] es el segundo
+// Pasandole un closure sin nombrar los parametros, solo usandolos según su posición, se usa [$]#. [$0] es el primero parametro que me llega y [$1] es el segundo
 reversedNames = randomNames.sorted(by: { $0 > $1 })
 
 // Pasandole un clousure extremadamente simplificado que compare dos valores por ejemplo
@@ -342,7 +342,7 @@ func escapingClousuresStorage(completionHandler: @escaping () -> Void) {
 }
 
 
-/* Enumerations (enumerados) o clase vaga */
+/* Enumerations (enums) o clase vaga */
 // Dato: Los [enum]s se copian POR VALOR, no por referencia (osea se crea un valor nuevo, no referencian a otra variable ya creada en memoria)
 enum CompassPoint {
   case north
@@ -375,6 +375,7 @@ var productBarcode = Barcode.upcCode(8, 85909, 51226, 3)
 productBarcode = .qrCode("www.url.com")
 
 switch productBarcode {
+// switch (productBarcode) // Podría ser así tambien, el [productBarcode] es lo que estamos evaluando en el Switch case
   case let .upcCode(numberSystem, manufacturer, product, check): // Recuperamos todos los parametros de la tupla [upcCode]
   // case .upcCode(let numberSystem, let manufacturer, let product, let check): // Podríamos recuperarlo tambien de esta manera
     print("UPC: \(numberSystem), \(manufacturer), \(product), \(check).")
