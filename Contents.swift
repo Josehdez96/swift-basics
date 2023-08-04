@@ -491,10 +491,10 @@ class Counter {
   
   func increment() -> Void {
     self.count += 1 // el [self] es exactamente lo mismo que el [this] en JS o en Dart, hace referencia a la clase
-    // count += 1 // Podría hacerse así también, es mejor por claridad usar el [self] (lo mismo que el [this]
+    // count += 1 // Podría hacerse así también, es mejor por claridad usar el [self] (lo mismo que el [this])
   }
   
-  static func randomStaticMethod() { // Podriamos usar tambien la palabra reservada [class] si queremos que el metodo pueda ser sobreescribido
+  static func randomStaticMethod() { // Podriamos usar tambien la palabra reservada [class] si queremos que el metodo pueda ser sobreescrito/override
     print("RandomStaticMethod called")
   }
 }
@@ -527,7 +527,6 @@ let threeTimesTables = TimesTable(multiplier: 3)
 print("6 x 3 = \(threeTimesTables[6])") // Es una sintaxis especial para usar el subscript y le paso 6 como [index]
 
 /* Matrices con subindices/subscripts */
-
 struct Matrix {
   let rows: Int, columns: Int
   var grid: [Double]
@@ -576,11 +575,10 @@ class Car: Vehicule { // Se usa el [:] para decir "extends" o "hereda" de una cl
 }
 
 /* Constructor y constructores "nombrados"/overloading */
-
 struct Celsius {
   var temperature: Double
   
-  init(fromFahrenheit fahrenheit: Double) { // Funciona como overloading, ya que tenemos dos constructores pero con contextos diferentes
+  init(fromFahrenheit fahrenheit: Double) { // Funciona como overloading, ya que tenemos dos (funciones con el mismo nombre que hacen diferentes cosas, en este caso) constructores con contextos diferentes
     self.temperature = (fahrenheit - 32) / 1.8
   }
   
@@ -598,7 +596,6 @@ let freezingPointOfWater = Celsius(fromKelvin: 273.15)
 let bodyTemperature = Celsius(37)
 
 /* Constructores/inicializadores en subclases */
-
 class VehicleAgain {
   var numberOfWheels = 0
   var description: String {
